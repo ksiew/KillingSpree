@@ -1,0 +1,70 @@
+[gd_scene load_steps=12 format=3 uid="uid://cracwitr0ovss"]
+
+[ext_resource type="Script" path="res://Scripts/StateObject.gd" id="1_a0nxj"]
+[ext_resource type="Resource" uid="uid://gq3f3hlcvcpa" path="res://Resources/stats/BasicEnemyStats.tres" id="2_yciwg"]
+[ext_resource type="Texture2D" uid="uid://bgw6l0q0u5hoe" path="res://icon.svg" id="3_plfhi"]
+[ext_resource type="Script" path="res://Scripts/AttackComponent.gd" id="4_ge18t"]
+[ext_resource type="PackedScene" uid="uid://blpxvapwsi4nk" path="res://Scenes/Hitbox.tscn" id="5_ryno3"]
+[ext_resource type="Script" path="res://Scripts/HealthComponent.gd" id="6_2m05s"]
+[ext_resource type="PackedScene" uid="uid://cv37oywfmfk05" path="res://Scenes/Hurtbox.tscn" id="7_jm05w"]
+[ext_resource type="Script" path="res://Scripts/DetectionComponent.gd" id="8_67fpo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_khaah"]
+size = Vector2(126.5, 128)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5w6f6"]
+radius = 470.0
+height = 940.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_imtlm"]
+radius = 550.0
+height = 1424.0
+
+[node name="Node2D" type="CharacterBody2D"]
+collision_layer = 64
+collision_mask = 384
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.75, -1)
+shape = SubResource("RectangleShape2D_khaah")
+debug_color = Color(0.504257, 0.576756, 0.17142, 0.42)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_plfhi")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="AttackComponent" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("4_ge18t")
+
+[node name="Hitbox" parent="AttackComponent" instance=ExtResource("5_ryno3")]
+disabled = true
+
+[node name="HealthComponent" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 4
+script = ExtResource("6_2m05s")
+
+[node name="Hurtbox" parent="HealthComponent" instance=ExtResource("7_jm05w")]
+position = Vector2(0, -2)
+
+[node name="StateComponent" type="Node2D" parent="." node_paths=PackedStringArray("player", "animationPlayer")]
+script = ExtResource("1_a0nxj")
+player = NodePath("..")
+animationPlayer = NodePath("../AnimationPlayer")
+playerStats = ExtResource("2_yciwg")
+
+[node name="DetectionComponent" type="Node" parent="."]
+script = ExtResource("8_67fpo")
+
+[node name="AlertRange" type="Area2D" parent="DetectionComponent"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionComponent/AlertRange"]
+shape = SubResource("CapsuleShape2D_5w6f6")
+
+[node name="AttackRange" type="Area2D" parent="DetectionComponent"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionComponent/AttackRange"]
+shape = SubResource("CapsuleShape2D_imtlm")

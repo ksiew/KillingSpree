@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="StateObjectStats" load_steps=2 format=3 uid="uid://ukp65qbdmw8y"]
+
+[ext_resource type="Script" path="res://Scripts/StateObjectStats.gd" id="1_4rf0o"]
+
+[resource]
+script = ExtResource("1_4rf0o")
+speed = 100
+jumpheight = 200
